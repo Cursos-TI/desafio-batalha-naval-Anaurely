@@ -40,8 +40,9 @@ int main() {
     RepresentarTabuleiro(tabuleiro);
     
     // Posiciona os navios (coordenadas predefinidas)
-    posicionarNavio(tabuleiro, 0, 1, 1); // Navio horizontal na linha 0, coluna (1+1)2
-    posicionarNavio(tabuleiro, 8, 6, 0); // Navio vertical na linha (7+1)8, coluna(5+1)6 (facilitar para contar)
+    posicionarNavio(tabuleiro, 0, 1, 1);  // Navio horizontal na linha 0, coluna (1+1)2, Orintação = 0 (Horizontal)
+    posicionarNavio(tabuleiro, 8, 6, 0); // Navio vertical na linha (4+1)5, coluna(7+1)8 (facilitar para contar),Orintação != 0 (vertical)
+    
     
     // Exibe o tabuleiro
     exibirTabuleiro(tabuleiro);
