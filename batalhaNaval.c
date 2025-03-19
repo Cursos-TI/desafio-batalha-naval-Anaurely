@@ -1,51 +1,81 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-int TAMANHO = 10;
-int NAVIO = 3;
+#define TAMANHO 10
+#define NAVIO 3
+
+
 
 // Função para representar o tabuleiro com 0
 void RepresentarTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
-    for (int x = 0; x < TAMANHO; x++) {
-        for (int y = 0; y < TAMANHO; y++) {
-            tabuleiro[x][y] = 0;
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            tabuleiro[i][j] = 0;
         }
     }
 }
 
-// Função para posicionar os navios
-void posicionarNavio(int tabuleiro[TAMANHO][TAMANHO], int linha, int coluna, int orientacao) {
-    for (int x = 0; x < NAVIO; x++) {
-        if (orientacao == 0) {
-            tabuleiro[linha][coluna + x] = NAVIO; // Horizontal
-        } else {
-            tabuleiro[linha + x][coluna] = NAVIO; // Vertical
-        }
-    }
-}
-
-// Função para exibir o tabuleiro
-void exibirTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
-    for (int x = 0; x < TAMANHO; x++) {
-        for (int y = 0; y < TAMANHO; y++) {
-            printf("%d ", tabuleiro[x][y]);
+// Função para apresentar o tabuleiro
+void apresentarTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            printf("%d ", tabuleiro[i][j]);
         }
         printf("\n");
     }
 }
 
+// função para confirmar(validar) navios.
+int validarposicao(int tabuleiro[TAMANHO][TAMANHO],int linha, int coluna, int tamanho, int direcao, int diagonal){
+    for (int i = 0; i < tamanho; i++) {
+        int x = linha + (diagonal ? i : (direcao == 1 ? i : 0));
+        int y = coluna + (diagonal ? i : (direcao == 0 ? i : 0));
+
+        if(x >= TAMANHO || y >= TAMANHO || tabuleiro[x][y] != 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+// Função para posicionar os navios
+void posicionarNavio(int tabuleiro[TAMANHO][TAMANHO], int tamanho, int diagonal) {
+    int linha, coluna, direcao ,valido;
+    do {
+        linha = rand() % TAMANHO;
+        coluna = rand() % TAMANHO;
+        direcao = rand() % 2; // 0 = horizontal, 1 = vertical
+        valido = validarposicao(tabuleiro, linha, coluna, tamanho, direcao, diagonal);
+    } while (!valido);
+
+    for (int i = 0; i < tamanho; i++) {
+        int x = linha + (diagonal ? i : (direcao == 1 ? i : 0));
+        int y = coluna + (diagonal ? i : (direcao == 0 ? i : 0));
+        tabuleiro[x][y] = NAVIO;
+    }
+}
+    
+
 int main() {
+    srand(time(NULL));
     int tabuleiro[TAMANHO][TAMANHO];
+
     
     // Representa tabuleiro
     RepresentarTabuleiro(tabuleiro);
     
-    // Posiciona os navios (coordenadas predefinidas)
-    posicionarNavio(tabuleiro, 0, 1, 1);  // Navio horizontal na linha 0, coluna (1+1)2, Orintação = 0 (Horizontal)
-    posicionarNavio(tabuleiro, 8, 6, 0); // Navio vertical na linha (4+1)5, coluna(7+1)8 (facilitar para contar),Orintação != 0 (vertical)
+    // Posiciona os navios (horizontais ou verticais).
+    posicionarNavio(tabuleiro, 3, 0);
+    posicionarNavio(tabuleiro, 3, 0);
     
-    
-    // Exibe o tabuleiro
-    exibirTabuleiro(tabuleiro);
+    // Posiciona os navios (diagonais).
+    posicionarNavio(tabuleiro, 3, 1);
+    posicionarNavio(tabuleiro, 3, 1);
+
+
+    // apresenta o tabuleiro
+    apresentarTabuleiro(tabuleiro);
     
     return 0;
 }
